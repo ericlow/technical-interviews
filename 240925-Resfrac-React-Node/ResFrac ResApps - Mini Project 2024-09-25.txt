@@ -1,0 +1,53 @@
+ResFrac ResApps Mini Project: Web App 
+
+Create an app using the tech stack and features described below. The app should use a web framework such as Angular 2+ (preferred), React, or Vue, and should use a state management system such as NgRx. The app should be able run on a Windows computer as a desktop app using Electron (preferred), or hosted via Express locally. Alternatively, the app could use Retool to accomplish the same functionality. Please include logging, unit test cases, a ReadMe file, and an architecture diagram. Once you are done with the mini project, please upload the code to your BitBucket/GitHub account and share the link, or send a zip file (if done in Retool, provide an export of the app). 
+
+Tech Stack:
+	TypeScript / JavaScript
+	Retool (preferred) / Angular 2+ (preferred) / React / Vue
+	Electron (preferred) / Express
+	Store / state management such as in @ngrx
+	Axios or other library / mechanism to make API calls from the app
+	SQLite / other SQL database
+	OAuth2
+
+Specifications:
+	Home Screen
+		displays a title bar with app name on the left, settings and login buttons on the right and window controls (min, max, close).
+		Body displays welcome message with some guidelines for user to login and select a city to see the weather for.
+	Settings screen shows settings (like weather API URL, API key, etc.) and allows user to update them. Settings should be stored in a SQLite database. If you prefer to use a different SQL database, that is also fine. 
+	Login screen should allow users to log in using a Google account via the OAuth2 protocol. If you prefer, you could alternatively support log in via a Microsoft account. 
+		Upon successful login, check the SQL database users table. If user is not found, add a record with basic details received from the Google/Microsoft ID token (first name, last name, email). 
+		Once logged in, home page displays input options (text boxes or a drop down) for user to provide location information and click a button to get weather info. 
+	Fetch the weather with the required details and display them in appropriate format. 
+	Provide a way for the user to log out. 
+
+Resources:
+	Weather API: Sign up for a free plan at https://weatherstack.com/product (feel free to use any other free api for weather as you see fit)
+	Google OAuth2: Sign up for a client ID (free): https://developers.google.com/identity/protocols/oauth2. Also fine to look up and use the Microsoft equivalent. 
+
+Please reach out if you have any questions or clarifications.
+
+
+Evaluation: 
+Front-end web frameworks (Retool or Angular 2+ preferred, or React/Vue)
+Store / State Management
+TypeScript/JavaScript
+Electron (preferred) or Express
+Testing
+SQLite
+OAuth2, REST
+
+-------
+Functional Weather 
+Fetch the weather with required details : what date range? What precision level (hourly, daily)? 
+Any guidance on "appropriate format"?
+How many cities to support? 
+How many cities does weather stack support? Should we support all of them?
+
+
+Should we be doing anything with the stored user information besides storing it? 
+
+NGRX is specified, but upon review, it is known as a library used mainly by the angular community.  Is NGRX a requirement, or is it merely a requirement to have state management? Redux for React).
+
+Any guidance on performance characteristics you are expecting to see? 
