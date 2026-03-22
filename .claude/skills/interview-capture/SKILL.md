@@ -173,12 +173,44 @@ System design and full-stack take-home problems do not require a runnable file.
 
 ---
 
-## Step 7: Confirm Output
+## Step 7: Route to Practice Repo
+
+After capturing the problem, determine whether a practice repo should be updated
+or checked for coverage. Use the problem type from the `{NN}-prompt.md` Type field:
+
+| Problem type | Practice repo | Action |
+|---|---|---|
+| Algorithmic, OOP, Python | `/Users/eric/projects/SentryEval` | See routing below |
+| Full-stack, React, Node, TypeScript, SQL | `/Users/eric/projects/learn-react` | See routing below |
+| System Design | No action — handled by a separate disconnected system |
+
+**If Python / Algorithmic / OOP:**
+Read `/Users/eric/projects/SentryEval/CLAUDE.md` and the relevant skill files
+(`oop-problem-gen`, `applied-oop-problem-gen`, `algo-problem-gen`). Ask:
+does the newly captured problem fit a problem type that is already covered by
+an existing skill? If yes, confirm coverage. If no, flag it:
+> "This problem type is not covered by any current SentryEval skill. Consider
+> running `/skill-gap-analysis` to evaluate whether a new skill is needed."
+
+**If Node / TypeScript / React / SQL:**
+Read `/Users/eric/projects/learn-react/CLAUDE.md`. Ask: does the problem fit
+an existing scenario or session type? If the problem introduces a new pattern
+not covered by any scenario or the session generation system, flag it:
+> "This problem type may not be covered by the current learn-react scenarios.
+> Consider adding a scenario or extending the session problem generator."
+
+**If uncertain about routing**, ask the user: "This problem used [stack] —
+should this map to SentryEval (Python/algorithmic) or learn-react (Node/React/SQL)?"
+
+---
+
+## Step 8: Confirm Output
 
 After writing the files, report:
 - The directory name
 - The files created (with full paths)
 - A one-sentence summary of the problem for the user to verify accuracy
+- The practice repo routing decision (or "System Design — no action")
 
 Do not update CLAUDE.md — that is the user's responsibility when adding a new
 session directory to the table.

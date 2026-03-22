@@ -193,7 +193,32 @@ the *delta* and the *reasoning*, not duplicate the content.
 
 ---
 
-## Step 8: Confirm Output
+## Step 8: Flag Practice Repo Impact
+
+After refreshing the analysis, assess whether the updated patterns suggest that
+either practice repo may be out of date.
+
+**For SentryEval (`/Users/eric/projects/SentryEval`):**
+If any new Python / algorithmic / OOP patterns were added or existing ones were
+significantly revised, flag it:
+> "New patterns were found that may not be covered by SentryEval skills. Consider
+> running `/skill-gap-analysis` against the updated `_meta/` files."
+
+**For learn-react (`/Users/eric/projects/learn-react`):**
+If any new Node / TypeScript / React / SQL patterns were added, flag it:
+> "New full-stack patterns were found. Consider whether any learn-react scenarios
+> or the session generation system should be extended."
+
+**System design problems:** note their presence in the analysis but do not
+flag any practice repo action — system design practice is handled by a separate
+disconnected system.
+
+If no new patterns were found (re-analysis confirmed existing patterns), state
+that explicitly — no action needed in either practice repo.
+
+---
+
+## Step 9: Confirm Output
 
 Report:
 - The three files updated with their paths
@@ -202,3 +227,4 @@ Report:
 - Any sessions skipped (no prompt/solution files)
 - Any new patterns added vs. the previous version
 - The date used in the "Source" line (today's date)
+- Practice repo impact assessment (SentryEval / learn-react / no action)

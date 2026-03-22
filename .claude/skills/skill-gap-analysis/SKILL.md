@@ -37,12 +37,34 @@ warn the user and recommend running `interview-repo-analyze` first.
 
 ---
 
-## Step 2: Load the Skill(s) to Evaluate
+## Step 2: Identify Which Practice Repo to Evaluate
 
-Ask the user which skill(s) to evaluate, or accept a path/name directly.
+There are two practice repos. The correct one depends on what the user wants to evaluate:
 
-Read the full `SKILL.md` for each skill to evaluate. Extract:
-- What problem type does it claim to generate?
+| Repo | Path | When to use |
+|---|---|---|
+| **SentryEval** | `/Users/eric/projects/SentryEval` | Python-based algorithmic, OOP, or applied OOP problems |
+| **learn-react** | `/Users/eric/projects/learn-react` | Node / TypeScript / React / SQL full-stack problems |
+| **System design** | N/A — disconnected system | Do not evaluate — no skills here to assess |
+
+If the user did not specify which repo, ask:
+> "Are you evaluating SentryEval (Python/algorithmic) or learn-react (Node/React/SQL)?"
+
+Read the target repo's `CLAUDE.md` first to understand what skills exist, then
+read the relevant `SKILL.md` files.
+
+**For SentryEval**, the skills to consider are:
+- `/Users/eric/projects/SentryEval/.claude/skills/oop-problem-gen/SKILL.md`
+- `/Users/eric/projects/SentryEval/.claude/skills/applied-oop-problem-gen/SKILL.md`
+- `/Users/eric/projects/SentryEval/.claude/skills/algo-problem-gen/SKILL.md`
+
+**For learn-react**, the skills to consider are:
+- `/Users/eric/projects/learn-react/.claude/skills/start-session/SKILL.md`
+- `/Users/eric/projects/learn-react/.claude/skills/end-session/SKILL.md`
+- `/Users/eric/projects/learn-react/.claude/skills/scenario-practice/SKILL.md`
+
+Read the full `SKILL.md` for each skill being evaluated. Extract:
+- What problem type does it claim to generate or run?
 - What phase structure does it follow?
 - What data structures or patterns does it target?
 - What validation tests does it apply?
