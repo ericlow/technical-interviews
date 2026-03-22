@@ -46,6 +46,7 @@ Deeper analysis of patterns, difficulty, and data structures is in `_meta/`. Loa
 | `_meta/analysis-patterns.md` | Data structure and algorithmic patterns observed across all problems |
 | `_meta/analysis-phases.md` | How interview problems escalate in difficulty (Phase 1–4 framework) |
 | `_meta/what-to-expect-algorithmic-interviews.md` | Full synthesis: format, phases, patterns, greedy reasoning, extensibility principle |
+| `_meta/analysis-log.md` | Dated log of how the analysis has evolved — load to understand how thinking changed over time |
 
 ## Skills
 

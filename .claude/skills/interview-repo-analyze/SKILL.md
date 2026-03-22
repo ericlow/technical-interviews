@@ -141,10 +141,63 @@ Sections (preserve structure, refresh content):
 
 ---
 
-## Step 7: Confirm Output
+## Step 7: Append to `_meta/analysis-log.md`
+
+This file is a running dated log of how the analysis has evolved. It is never
+overwritten — only appended to. It is the audit trail of how understanding of
+the problem domain has changed over time.
+
+**If the file does not exist**, create it with the header:
+
+```markdown
+# Analysis Log
+
+A dated record of how the meta-analysis files have evolved. Each entry documents
+what changed, what prompted the change, and what new understanding it reflects.
+Load this file when you want to understand how thinking about the problem domain
+has developed over time, not just the current state.
+
+---
+```
+
+**Append one entry per run**, even if the changes were minor:
+
+```markdown
+## [YYYY-MM-DD]
+
+**Sessions analyzed:** [N]
+**Sessions added since last run:** [list, or "none"]
+
+### What changed
+
+[For each of the three analysis files: describe what was added, updated, or
+removed. Be specific — name the patterns, phases, or sections that changed.
+If nothing changed in a file, say so explicitly.]
+
+### What prompted the change
+
+[What new sessions, new problems, or new understanding drove the update?
+If this is the initial entry, describe the starting state and what was
+consolidated from raw materials.]
+
+### How our understanding evolved
+
+[Narrative paragraph: what do we now understand about this problem domain
+that we did not before — or what was confirmed? This is the most important
+part of the log. Do not skip it. Write it as a first-person reflection, as
+if explaining to a future session why the analysis looks the way it does.]
+```
+
+Do not summarize the three analysis files here — the log entry should capture
+the *delta* and the *reasoning*, not duplicate the content.
+
+---
+
+## Step 8: Confirm Output
 
 Report:
 - The three files updated with their paths
+- The log entry appended to `_meta/analysis-log.md`
 - Count of sessions analyzed
 - Any sessions skipped (no prompt/solution files)
 - Any new patterns added vs. the previous version
