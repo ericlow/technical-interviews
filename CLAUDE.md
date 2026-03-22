@@ -45,6 +45,17 @@ Deeper analysis of patterns, difficulty, and data structures is in `_meta/`. Loa
 |---|---|
 | `_meta/analysis-patterns.md` | Data structure and algorithmic patterns observed across all problems |
 | `_meta/analysis-phases.md` | How interview problems escalate in difficulty (Phase 1–4 framework) |
+| `_meta/what-to-expect-algorithmic-interviews.md` | Full synthesis: format, phases, patterns, greedy reasoning, extensibility principle |
+
+## Skills
+
+Slash commands available in this repo for common tasks:
+
+| Skill | When to use |
+|---|---|
+| `/interview-capture` | Raw materials (photos, PDFs, code) exist but no prompt/solution files — generates `{NN}-prompt.md`, `{NN}-solution.md` |
+| `/interview-repo-analyze` | New sessions have been added and `_meta/` files are stale — refreshes all three analysis files |
+| `/skill-gap-analysis` | Evaluate whether a problem-generation skill (e.g. in SentryEval) matches the patterns observed in this repo |
 
 ## Instructions for future sessions
 
