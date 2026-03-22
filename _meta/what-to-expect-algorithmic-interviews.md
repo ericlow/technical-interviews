@@ -58,37 +58,53 @@ Phase 1 is rarely where candidates fail. They fail when Phase 2 arrives and thei
 
 ---
 
+## Two problem types — know which one you're facing
+
+Not all problems in this repo are the same kind of challenge. Misidentifying the type
+leads to solving the wrong problem.
+
+**Algorithmically-core:** the domain is real-world but the challenge is a recognizable
+CS algorithm. Recognize the pattern, implement it cleanly.
+- Stack trace profiler → tree construction (trie variant)
+- Block puzzle → greedy grid traversal
+- Word counter → stream aggregation into a dict
+
+**Systems-core:** the algorithm is trivial (O(n) at most); the challenge is OOP design,
+state placement, and extensibility under Phase 2.
+- Parking garage, bank account → applied OOP with progressive requirements
+- Trailer yard → interval logic in a real domain
+
+Sentry asked both types in the same session. When you see a problem, ask first:
+*"Is the hard part the algorithm, or the design?"*
+
+---
+
 ## Algorithmic patterns observed
 
 ### Command dispatch
-A list of operations is processed sequentially. Each command has a type and arguments. Route by type, validate, mutate state, return result.
+Route by operation type, validate, mutate state, return result.
 - Example: Bank (`CREATE`, `ADD`, `TRANSFER`)
-- Phase 1 characteristic: one operation type, caller provides all addressing
 
 ### OOP simulation with progressive requirements
-Classes are given or obvious. Implement operations against them. Each requirement adds a constraint or removes an assumption the previous requirement had.
+Interface given upfront. Each phase adds a constraint or removes an assumption.
 - Example: Parking garage (basic park → size-aware → distance-optimized)
 - Key risk: Phase 1 design that can't accommodate Phase 2 without a rewrite
 
 ### Stream aggregation
-Events arrive one at a time. Maintain a running aggregate. Query the aggregate efficiently.
-- Example: Word counter (`onTweet` → `getWordCount`)
-- Natural structure: dict (word → count)
+Events arrive one at a time. Maintain a running aggregate. Query efficiently.
+- Example: Word counter (`onTweet` → `getWordCount`) — natural structure: dict
 
 ### Tree construction from flat input
-Input is a flat list of paths or sequences. Output is a hierarchical tree with aggregated counts.
-- Example: Stack trace profiler (list of traces → call tree)
-- Natural structure: tree node with ordered-dict children
+Flat list of paths or call sequences → hierarchical tree with aggregated counts.
+- Example: Stack trace profiler — natural structure: tree node with ordered-dict children
 
 ### Grid simulation
-A 2D grid with entities and movement rules. Determine valid moves at each step.
-- Example: Block puzzle (find any block with clear exit path)
-- Natural structure: the grid itself (list of strings); block cells as list of (row, col) tuples
+2D grid with entities and movement rules. Determine valid moves at each step.
+- Example: Block puzzle — natural structure: grid (list of strings); cells as (row, col) tuples
 
 ### Datetime interval overlap
-Events have start and end times. Determine which events overlap a target date or window.
-- Example: Trailer yard filter
-- Key insight: equality check on date misses multi-day events; use interval overlap formula
+Events have start and end times. Naive equality check misses multi-day spans.
+- Example: Trailer yard filter — use interval overlap formula, treat null exit as ∞
 
 ---
 

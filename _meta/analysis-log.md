@@ -69,3 +69,49 @@ repository reached heap-level complexity in an OOP context. Phase 3 optimization
 were universally linear scan + `min()`/`max()` with a key function, sometimes
 with a tiebreaker. Coaching skills that target heap-level complexity are
 miscalibrated for the interview format represented here.
+
+---
+
+## 2026-03-21 (revision)
+
+**Sessions analyzed:** 12
+**Sessions added since last run:** None — correction to existing analysis
+
+### What changed
+
+**analysis-patterns.md** — Pattern 7 revised. The original claim ("no abstract
+LeetCode — problems simulate actual systems") was imprecise. Replaced with a
+two-sub-type distinction: *algorithmically-core* problems (tree construction,
+greedy grid, stream aggregation) where the domain is a wrapper around a
+recognizable CS algorithm; and *systems-core* problems (applied OOP, interval
+logic) where the algorithm is trivial and the challenge is design and extensibility.
+
+**what-to-expect-algorithmic-interviews.md** — Added a "Two problem types" section
+before the pattern list. Reframed the opening question from "what pattern is this?"
+to "is the hard part the algorithm, or the design?" Condensed the pattern
+descriptions to make room without exceeding file size limits.
+
+**analysis-log.md** — This entry.
+
+### What prompted the change
+
+Observation that the Sentry session asked both a tree construction problem (stack
+trace profiler) and an applied OOP problem (parking garage) in the same interview.
+The profiler is algorithmically-core — its core challenge is building a trie-like
+structure from flat input, which is a recognizable CS problem type regardless of
+the stack trace framing. Treating it the same as the parking garage (systems-core)
+was a meaningful analytical error.
+
+### How our understanding evolved
+
+The original analysis overcorrected against LeetCode framing. "Real-world domain"
+is true of every problem here, but it does not mean every problem is free of
+algorithmic thinking. The more useful distinction is whether the difficulty lives
+in the algorithm (recognize it, implement it) or in the design (extensibility,
+state placement, OOP structure).
+
+This matters for practice: algorithmically-core problems reward pattern recognition
+and should be drilled in SentryEval with `algo-problem-gen`. Systems-core problems
+reward design instincts and should be drilled with `applied-oop-problem-gen`. A
+session that asks both — like the Sentry session — is testing two different skills
+in sequence, and preparation should reflect that.

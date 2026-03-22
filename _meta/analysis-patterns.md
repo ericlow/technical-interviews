@@ -107,9 +107,27 @@ Event [entrance, exit] overlaps day D if:
 
 ---
 
-## Pattern 7: Real-world framing, not abstract LeetCode
+## Pattern 7: Real-world framing — but not all problems are systems problems
 
-No "reverse a linked list." Problems simulate actual systems. The algorithm serves a recognizable domain. This means:
-- Domain knowledge helps (understand what a transfer means before coding it)
-- Edge cases come from the domain (same-account transfer, null exit time, non-contiguous block shapes)
-- Phase 2+ requirements come from how the real system would actually be used
+Every problem in this repo uses a real-world domain. That is not the same as saying
+every problem is free of algorithmic thinking. There are two distinct sub-types:
+
+**Algorithmically-core problems** — the challenge is a recognizable CS algorithm or
+data structure. The domain is the wrapper, not the challenge.
+- Stack trace profiler: tree construction from flat input (a trie variant)
+- Block puzzle: greedy grid traversal
+- Word counter: stream aggregation into a dict
+- These are closer to LeetCode in structure — the domain helps with edge cases but
+  doesn't change the fundamental algorithm required.
+
+**Systems-core problems** — the challenge is OOP design, extensibility, and state
+management. The algorithm is trivial; the design is not.
+- Parking garage, bank account: applied OOP with progressive requirements
+- Trailer yard: datetime interval logic embedded in a real system
+- These are not LeetCode-style — the algorithm is O(n) at most; the real test is
+  whether the design holds up under Phase 2.
+
+**Practice implication:** Know which type you are facing before you start.
+Algorithmically-core problems reward pattern recognition. Systems-core problems
+reward design instincts and extensibility awareness. Sentry, for example, asked
+both in the same session — the profiler (algorithmic) and the parking garage (systems).
