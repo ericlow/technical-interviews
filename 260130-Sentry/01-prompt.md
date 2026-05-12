@@ -47,3 +47,10 @@ main, 70 ms
 def count_stack(traces: list[list[str]]) -> str:
     ...
 ```
+
+## Phase Structure (recalled — not in raw materials)
+
+The raw prompt presents this as a single function, but the problem was revealed in two phases:
+
+- **Phase 1:** Build the tree — walk each trace top-down, create nodes on first visit, increment counts
+- **Phase 2:** Walk the tree (DFS) and print the indented output with millisecond counts

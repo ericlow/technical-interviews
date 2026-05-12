@@ -2,6 +2,7 @@
 
 ## Source
 Derived from analysis of all interview sessions in this repository (March 2026).
+Updated 2026-03-26: added TabaPay HackerRank session.
 
 ## Problems classified as algorithmic
 
@@ -15,17 +16,21 @@ Derived from analysis of all interview sessions in this repository (March 2026).
 | `260130-Sentry` (02) | Parking garage OOP | Python |
 | `260320-Typescript-Node-React-Database` (01) | EventEmitter with interval + abort | TypeScript/Node |
 | `260320-Typescript-Node-React-Database` (02) | SQL INSERT with JOIN | SQL |
+| `260326-Python-HackerRank-TabaPay` (01) | Transaction Ledger — stdin aggregation | Python |
+| `260326-Python-HackerRank-TabaPay` (02) | Spell Check — multiset frequency check | Python |
 
 ---
 
 ## Pattern 1: Progressive requirements
 
-Every algorithmic problem adds layers mid-interview. You ship a working v1, then requirements are extended. Expect this in every session.
+Every human-interviewer algorithmic problem adds layers mid-interview. You ship a working v1, then requirements are extended. Expect this in every live session.
 
 - Parking garage: basic park → size-aware → distance-optimized → entrance/exit
 - Bank: CREATE/ADD → TRANSFER/REPORT
 - Everlaw: local impl → DB selection → corner cases → capacity planning
 - Trailer Yard: parse → filter → (implied) invoice calculation
+
+**Exception:** Automated screens (HackerRank) do not have progressive requirements — each problem is self-contained and graded pass/fail.
 
 **Practice implication:** Write code that is easy to extend. Avoid hardcoding assumptions that the next requirement will break.
 
@@ -41,6 +46,7 @@ A dict is the right first structure when the problem contains a **lookup**: "giv
 | Parking garage | Given license plate, find spot | `plate → spot_id` |
 | Word counter | Given word, find count | `word → count` |
 | Stack profiler | Given function name at this level, find node | `name → Node` (within tree) |
+| Transaction Ledger | Given date or month, find totals | `(month, day) → [G_total, P_total]` |
 
 **When NOT to reach for dict first:**
 - Stack profiler: primary structure is a **tree** (dict is secondary, inside nodes)
@@ -63,6 +69,7 @@ Ask "what is the shape of this data?" before choosing a structure.
 | Spatial / positional | 2D grid (list of lists/strings) | block puzzle |
 | Objects with behavior and relationships | classes | parking garage |
 | Ordered sequence with time intervals | list of objects | trailer yard events |
+| "Can this request be satisfied by the pool?" | Counter / frequency dict | spell check |
 
 ---
 
@@ -89,6 +96,7 @@ Problems involving text nearly always require normalization that isn't stated up
 
 - Word counter: `"Twitter."` and `"twitter"` must match → lowercase + strip punctuation
 - Stack profiler: function names are exact strings — no normalization, but insertion order matters
+- Spell Check: input has spaces after commas → strip whitespace from each token
 
 Interviewers ask "what corner cases did you miss?" after the happy path works. Have an answer ready.
 
@@ -117,6 +125,8 @@ data structure. The domain is the wrapper, not the challenge.
 - Stack trace profiler: tree construction from flat input (a trie variant)
 - Block puzzle: greedy grid traversal
 - Word counter: stream aggregation into a dict
+- Transaction Ledger: stdin aggregation with sort-then-print
+- Spell Check: multiset frequency check
 - These are closer to LeetCode in structure — the domain helps with edge cases but
   doesn't change the fundamental algorithm required.
 
@@ -131,3 +141,22 @@ management. The algorithm is trivial; the design is not.
 Algorithmically-core problems reward pattern recognition. Systems-core problems
 reward design instincts and extensibility awareness. Sentry, for example, asked
 both in the same session — the profiler (algorithmic) and the parking garage (systems).
+
+---
+
+## Pattern 8: Multiset / frequency-map reasoning
+
+Appears when the problem is "can this request be satisfied given a pool of resources?"
+The resources and the request both have quantities per item — not just presence/absence.
+
+- Spell Check: available letters have counts; each word needs counts; word passes iff every
+  required count ≤ available count.
+
+**Natural tool:** `collections.Counter`. Counter subtraction (`word_count - available`)
+drops zero/negative results — the difference is empty `{}` exactly when all requirements
+are met. This eliminates the need for a manual loop over letters.
+
+**Generalizes to:** inventory checks, anagram detection, resource allocation with limits.
+
+**Edge cases:** a letter needed more times than available (e.g., two `a`s but one in pool)
+— Counter subtraction catches this; a set-membership check does not.

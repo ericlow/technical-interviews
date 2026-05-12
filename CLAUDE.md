@@ -22,6 +22,8 @@ Each directory is one interview session, named `YYMMDD-Company-Stack`.
 | `251120-Supio-SystemDesign` | System design (take-home doc) | Architecture, LLM pipeline |
 | `260130-Sentry` | Algorithmic — OOP, tree traversal | Python |
 | `260320-Typescript-Node-React-Database` | Algorithmic + SQL | TypeScript, Node.js, SQL |
+| `260322-Verkada` | Prep materials only — no prompt files yet | — |
+| `260326-Python-HackerRank-TabaPay` | Algorithmic — HackerRank screen (2 problems) | Python |
 
 ## Naming convention
 

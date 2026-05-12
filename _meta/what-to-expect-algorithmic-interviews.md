@@ -2,20 +2,28 @@
 
 ## Source
 Derived from analysis of all interview sessions in this repository (March 2026).
+Updated 2026-03-26: added TabaPay HackerRank session.
 Refresh by re-reading the `_meta/` files and all `{NN}-prompt.md` files, then regenerate.
 
 ---
 
 ## Format
 
+**Live interview (human interviewer):**
 - 45–60 minutes, one interviewer watching you think out loud
 - 1–2 problems, almost always with progressive requirements
 - You are expected to ask clarifying questions before coding
 - Requirements are extended mid-session — this is intentional, not a surprise
 
+**Automated screening (HackerRank, similar platforms):**
+- Multiple self-contained problems (no progressive requirements)
+- Pass/fail test cases — output format must be exact
+- Graded on correctness and edge case coverage, not design decisions
+- Focus: clean Phase 1 implementation, stdin/stdout parsing, output formatting
+
 ---
 
-## What interviewers are actually evaluating
+## What interviewers are actually evaluating (live sessions)
 
 - Can you recognize the shape of the problem before writing code?
 - Do you validate your understanding before diving in?
@@ -31,7 +39,7 @@ Phase 1 is rarely where candidates fail. They fail when Phase 2 arrives and thei
 
 ---
 
-## Phase structure (observed across all sessions)
+## Phase structure (observed across all live sessions)
 
 | Phase | What changes | Candidate responsibility |
 |---|---|---|
@@ -53,6 +61,7 @@ Phase 1 is rarely where candidates fail. They fail when Phase 2 arrives and thei
 | Hierarchical / parent-child | tree | stack profiler |
 | Spatial / positional | 2D grid | block puzzle |
 | Ordered sequence with time intervals | list of objects | trailer yard events |
+| "Can this request be satisfied by the pool?" | Counter / frequency dict | spell check |
 
 **The real skill:** ask "what is the shape of this data?" before writing any code.
 
@@ -68,6 +77,8 @@ CS algorithm. Recognize the pattern, implement it cleanly.
 - Stack trace profiler → tree construction (trie variant)
 - Block puzzle → greedy grid traversal
 - Word counter → stream aggregation into a dict
+- Transaction Ledger → stdin aggregation with sort-then-print
+- Spell Check → multiset frequency check (Counter subtraction)
 
 **Systems-core:** the algorithm is trivial (O(n) at most); the challenge is OOP design,
 state placement, and extensibility under Phase 2.
@@ -93,6 +104,13 @@ Interface given upfront. Each phase adds a constraint or removes an assumption.
 ### Stream aggregation
 Events arrive one at a time. Maintain a running aggregate. Query efficiently.
 - Example: Word counter (`onTweet` → `getWordCount`) — natural structure: dict
+- Example: Transaction Ledger (stdin lines → two dicts, then sort-and-print)
+
+### Multiset / frequency-map
+Check if a request can be satisfied by a pool of resources with per-item quantities.
+- Example: Spell Check — letter availability per word, checked with Counter subtraction
+- Key tool: `Counter(word) - Counter(available)` is empty `{}` iff all letters are available
+- Generalizes to: anagram detection, inventory checks, resource allocation with limits
 
 ### Tree construction from flat input
 Flat list of paths or call sequences → hierarchical tree with aggregated counts.
@@ -145,6 +163,8 @@ Not contrived. The domain tells you what can go wrong:
 - Null exit time — trailer still present (trailer yard)
 - Non-contiguous block shapes (block puzzle)
 - Punctuation attached to words (word counter)
+- Letter needed more times than available (spell check)
+- Input whitespace after comma-delimited fields (any stdin problem)
 
 **Before coding Phase 1:** list the domain-specific edge cases out loud. Interviewers evaluate thoroughness here, not just correctness.
 

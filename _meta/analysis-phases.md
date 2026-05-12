@@ -2,10 +2,15 @@
 
 ## Source
 Derived from analysis of all interview sessions in this repository (March 2026).
+Updated 2026-03-26: added TabaPay HackerRank session observations.
 
 ## The core observation
 
-Every algorithmic interview problem in this repo has multiple phases. The phases are not labeled "easy/medium/hard" — they escalate by changing *what the candidate is responsible for*.
+Every human-interviewer algorithmic problem in this repo has multiple phases. The phases are not labeled "easy/medium/hard" — they escalate by changing *what the candidate is responsible for*.
+
+**Automated screens (HackerRank):** do not follow the phase progression. Each problem
+is self-contained, single-phase, and graded pass/fail. The phase framework applies to
+live interview sessions only.
 
 ---
 
@@ -26,6 +31,8 @@ Every algorithmic interview problem in this repo has multiple phases. The phases
 | Bank | `CREATE` / `ADD` — account name given, just validate uniqueness and mutate balance |
 | Trailer Yard | Parse JSON and deserialize datetime strings |
 | Word counter | `onTweet(id)` — fetch, split, increment |
+| Transaction Ledger | Parse stdin lines, accumulate totals into two dicts |
+| Spell Check | For each word, check letter frequency against available pool |
 
 **Common mistake:** Jumping to Phase 2 logic before Phase 1 is clean. Interviewers notice.
 

@@ -115,3 +115,66 @@ and should be drilled in SentryEval with `algo-problem-gen`. Systems-core proble
 reward design instincts and should be drilled with `applied-oop-problem-gen`. A
 session that asks both — like the Sentry session — is testing two different skills
 in sequence, and preparation should reflect that.
+
+---
+
+## 2026-03-26
+
+**Sessions analyzed:** 13
+**Sessions added since last run:** 1 — `260326-Python-HackerRank-TabaPay`
+**Skipped (no prompt files):** `260322-Verkada` (prep_plan.md only — not yet capturable)
+
+### What changed
+
+**analysis-patterns.md** — Added `260326-Python-HackerRank-TabaPay` to the problems
+table (2 new problems: Transaction Ledger and Spell Check). Added Pattern 8: Multiset /
+frequency-map reasoning (Counter subtraction for availability checks). Updated Pattern 1
+with an explicit note that automated screens do not follow the progressive requirements
+pattern. Updated Pattern 7 to include the TabaPay problems as algorithmically-core examples.
+
+**analysis-phases.md** — Added Transaction Ledger and Spell Check to the Phase 1
+examples table. Added a note at the top distinguishing automated screens (HackerRank)
+from live interviews: automated screens are always single-phase, pass/fail, no progressive
+requirements.
+
+**what-to-expect-algorithmic-interviews.md** — Updated Format section to distinguish
+live interviews from automated screens. Added "multiset availability check" to the
+problem shapes table. Added Multiset/frequency-map as a new pattern in the patterns
+section. Added Spell Check and Transaction Ledger as examples under Stream Aggregation
+and the new Multiset section. Added two new edge case examples (letter quantity
+mismatch, input whitespace after commas).
+
+**analysis-log.md** — This entry.
+
+### What prompted the change
+
+`260326-Python-HackerRank-TabaPay` appeared as an untracked directory with full
+prompt/solution files. The session was a HackerRank automated screen with two
+self-contained problems. This is the first automated-screen session in the repository —
+all prior algorithmic sessions were live human-interviewer formats.
+
+Note: CLAUDE.md does not yet list `260326-Python-HackerRank-TabaPay` or
+`260322-Verkada`. Both should be added to the directory table.
+
+### How our understanding evolved
+
+The TabaPay session introduced the first example of **multiset reasoning** in the
+repository — specifically the Spell Check problem, where the challenge is whether a
+word's letter requirements can be satisfied by a pool with per-letter counts. This is
+meaningfully different from the word counter (Everlaw), which aggregates frequencies
+into a dict for querying. In spell check, the dict is compared against another dict,
+not queried directly. The key tool is Counter subtraction, which handles the "not
+enough of this letter" case that a set-membership check would miss.
+
+The Transaction Ledger problem reinforced an existing sub-pattern (stdin parsing →
+accumulation → sort-then-print) but added the detail that automated HackerRank problems
+place heavy weight on exact output formatting — a dimension not tested in live interviews
+where the interviewer can clarify ambiguities.
+
+More broadly, the presence of an automated screen session clarifies that the phase
+framework is a property of live interview format, not of algorithmic problems in general.
+HackerRank problems are single-phase by design: there is no interviewer to extend the
+requirements, so extensibility is not evaluated. This means SentryEval's progressive
+problem generation is correctly calibrated for live sessions but should not be used to
+practice for automated screens — those require a different drill focused on clean
+single-problem execution and edge case enumeration.
