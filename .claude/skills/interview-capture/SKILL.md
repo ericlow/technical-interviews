@@ -77,7 +77,12 @@ covered by existing scenarios or the session generator.
 If the stack is ambiguous, ask: "Should this map to SentryEval (Python/algorithmic)
 or learn-react (Node/React/SQL)?"
 
-## Step 8: Confirm Output
+## Step 8: Update `CLAUDE.md`
+
+Add the new session to the directory table in `CLAUDE.md` if it is not already listed.
+Columns: directory name, problem type description, stack.
+
+## Step 9: Confirm Output
 
 Report: directory, files created, one-sentence problem summary, practice repo
-routing decision. Do not update `CLAUDE.md` — that is the user's responsibility.
+routing decision, whether `CLAUDE.md` was updated.

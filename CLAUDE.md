@@ -24,6 +24,7 @@ Each directory is one interview session, named `YYMMDD-Company-Stack`.
 | `260320-Typescript-Node-React-Database` | Algorithmic + SQL | TypeScript, Node.js, SQL |
 | `260322-Verkada` | Prep materials only — no prompt files yet | — |
 | `260326-Python-HackerRank-TabaPay` | Algorithmic — HackerRank screen (2 problems) | Python |
+| `260511-Mosaic-Python` | Backend API take-home — REST CRUD, concurrent writes | Python, PostgreSQL |
 
 ## Naming convention
 
