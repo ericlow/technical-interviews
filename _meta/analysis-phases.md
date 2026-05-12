@@ -3,6 +3,7 @@
 ## Source
 Derived from analysis of all interview sessions in this repository (March 2026).
 Updated 2026-03-26: added TabaPay HackerRank session observations.
+Updated 2026-05-11: added Mosaic take-home backend API session.
 
 ## The core observation
 
@@ -33,6 +34,7 @@ live interview sessions only.
 | Word counter | `onTweet(id)` — fetch, split, increment |
 | Transaction Ledger | Parse stdin lines, accumulate totals into two dicts |
 | Spell Check | For each word, check letter frequency against available pool |
+| Mosaic bookstore | 5 CRUD endpoints — schema given, implement standard REST operations |
 
 **Common mistake:** Jumping to Phase 2 logic before Phase 1 is clean. Interviewers notice.
 
@@ -84,6 +86,7 @@ live interview sessions only.
 | Everlaw | Database selection, capacity planning for 100M tweets |
 | AWS manager | Concurrent multi-region queries with partial failure resilience |
 | Supio | Scale to 1000 docs/day, LLM rate limits, DLQ strategy |
+| Mosaic bookstore | Concurrent award increments — lost update problem, atomic SQL vs. locking strategies |
 
 ---
 

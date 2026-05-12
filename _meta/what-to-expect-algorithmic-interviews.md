@@ -3,6 +3,7 @@
 ## Source
 Derived from analysis of all interview sessions in this repository (March 2026).
 Updated 2026-03-26: added TabaPay HackerRank session.
+Updated 2026-05-11: added Mosaic take-home backend API session.
 Refresh by re-reading the `_meta/` files and all `{NN}-prompt.md` files, then regenerate.
 
 ---
@@ -20,6 +21,13 @@ Refresh by re-reading the `_meta/` files and all `{NN}-prompt.md` files, then re
 - Pass/fail test cases — output format must be exact
 - Graded on correctness and edge case coverage, not design decisions
 - Focus: clean Phase 1 implementation, stdin/stdout parsing, output formatting
+
+**Take-home backend API project:**
+- 60–90 minutes; full REST API with a relational database
+- You own the stack choice; schema design and API design both evaluated
+- Progressive stretch goals replace live phase escalation
+- Concurrency and schema correctness are explicitly tested — not just correctness of output
+- Example: Mosaic bookstore (CRUD + concurrent award increments + optional soft deletes/pagination)
 
 ---
 
@@ -62,6 +70,7 @@ Phase 1 is rarely where candidates fail. They fail when Phase 2 arrives and thei
 | Spatial / positional | 2D grid | block puzzle |
 | Ordered sequence with time intervals | list of objects | trailer yard events |
 | "Can this request be satisfied by the pool?" | Counter / frequency dict | spell check |
+| Two tables in sync, one denormalized from the other | relational DB + atomic SQL | Mosaic bookstore (`num_total_awards`) |
 
 **The real skill:** ask "what is the shape of this data?" before writing any code.
 
@@ -123,6 +132,13 @@ Flat list of paths or call sequences → hierarchical tree with aggregated count
 ### Datetime interval overlap
 Events have start and end times. Naive equality check misses multi-day spans.
 - Example: Trailer yard filter — use interval overlap formula, treat null exit as ∞
+
+### Concurrent writes to denormalized state
+Two tables must stay in sync under simultaneous requests. Naive read-modify-write produces lost updates.
+- Example: Mosaic bookstore — `num_total_awards` must reflect every book increment atomically
+- Three strategies: atomic SQL (no read needed), pessimistic lock (`SELECT FOR UPDATE`), optimistic lock (version column + retry)
+- **This is a known weak spot.** Candidates who haven't explicitly studied this reach for wrong answers. Interviewers treat it as a strong signal.
+- Correct pick here: atomic SQL inside one transaction — no read required, minimal lock scope.
 
 ---
 

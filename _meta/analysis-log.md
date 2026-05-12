@@ -178,3 +178,33 @@ requirements, so extensibility is not evaluated. This means SentryEval's progres
 problem generation is correctly calibrated for live sessions but should not be used to
 practice for automated screens — those require a different drill focused on clean
 single-problem execution and edge case enumeration.
+
+---
+
+## 2026-05-11
+
+**Sessions analyzed:** 14 (15 directories total; 1 skipped)
+**Sessions added since last run:** 1 — `260511-Mosaic-Python`
+**Skipped (no prompt files):** `260322-Verkada` (prep materials only)
+
+### What changed
+
+**analysis-patterns.md** — Added `260511-Mosaic-Python` to a new "Take-home backend API sessions" table (separate from the algorithmic problems table, since the classification doesn't fit). Added Pattern 9: Concurrent writes to denormalized state — covering the lost update problem, and all three strategies (atomic SQL, pessimistic lock, optimistic lock) with explicit coaching guidance that candidates must reason through all three and pick one with justification.
+
+**analysis-phases.md** — Added Mosaic bookstore to Phase 1 examples (CRUD endpoints) and Phase 4 examples (concurrent award increment discussion).
+
+**what-to-expect-algorithmic-interviews.md** — Added a third format type (take-home backend API project) to the Format section. Added "two tables in sync, one denormalized" as a new problem shape. Added "Concurrent writes to denormalized state" as a new pattern in the patterns section with a coaching warning.
+
+**analysis-log.md** — This entry.
+
+### What prompted the change
+
+`260511-Mosaic-Python` was captured from a Mosaic interview on 2026-05-11. The problem is a backend REST API take-home: 5 CRUD endpoints, an award-increment endpoint that updates two tables atomically, and stretch goals for soft deletes, genre aliasing, and filtering/pagination/sorting. The concurrency section — "what could go wrong if multiple requests hit this endpoint simultaneously?" — is the primary evaluative signal in the interview.
+
+### How our understanding evolved
+
+This session introduced two things the repository had not seen before. First, a **third interview format**: the take-home backend API project. Prior sessions were either live human-interviewer algorithmic problems (with progressive requirements) or automated HackerRank screens (single-phase, pass/fail). The Mosaic format is different from both — it gives the candidate full stack ownership, uses stretch goals instead of live phase escalation, and explicitly tests concurrency and schema design.
+
+Second, and more significantly, it introduced the **lost update / concurrent write pattern** as a distinct interview topic. This is qualitatively different from prior concurrency content in the repository (which appeared only in Phase 4 discussions about scale). Here, concurrency is a first-class engineering question: the candidate must know why naive read-modify-write fails, and must be able to articulate when to use atomic SQL vs. `SELECT FOR UPDATE` vs. optimistic locking with a version column. The distinction is not trivia — it reflects whether the candidate has actually reasoned about database behavior under load, or is just hoping the ORM handles it.
+
+This is flagged as a **known weak spot** in the coaching notes because ORMs abstract it away in day-to-day work. Candidates who haven't explicitly studied it will either say nothing or propose application-level solutions (mutexes, locks in code) that don't work across multiple web server processes. Any practice problem generated from this pattern must require the candidate to name all three strategies and defend their choice.

@@ -3,8 +3,11 @@
 ## Source
 Derived from analysis of all interview sessions in this repository (March 2026).
 Updated 2026-03-26: added TabaPay HackerRank session.
+Updated 2026-05-11: added Mosaic take-home backend API session.
 
-## Problems classified as algorithmic
+## Problems classified as algorithmic (live or automated screen)
+
+> Note: `260511-Mosaic-Python` is a take-home backend API problem, not an algorithmic session. It is listed separately below but contributes Pattern 9.
 
 | Session | Problem | Language |
 |---|---|---|
@@ -144,6 +147,16 @@ both in the same session — the profiler (algorithmic) and the parking garage (
 
 ---
 
+---
+
+## Take-home backend API sessions
+
+| Session | Problem | Stack |
+|---|---|---|
+| `260511-Mosaic-Python` | Bookstore inventory REST API + concurrent award updates | Python, PostgreSQL |
+
+---
+
 ## Pattern 8: Multiset / frequency-map reasoning
 
 Appears when the problem is "can this request be satisfied given a pool of resources?"
@@ -160,3 +173,36 @@ are met. This eliminates the need for a manual loop over letters.
 
 **Edge cases:** a letter needed more times than available (e.g., two `a`s but one in pool)
 — Counter subtraction catches this; a set-membership check does not.
+
+---
+
+## Pattern 9: Concurrent writes to denormalized state
+
+Appears when two tables must stay in sync and multiple requests may arrive simultaneously.
+The classic form: a counter in table A is the sum of a field across rows in table B.
+
+- Mosaic bookstore: `authors.num_total_awards` = sum of `books.num_awards` per author.
+  An increment endpoint must update both atomically.
+
+**What goes wrong without care:** two requests read `num_awards = 5` simultaneously,
+both compute `6`, both write `6` — one increment is lost. This is a **lost update**.
+
+**Three strategies — candidates must know all three and when each applies:**
+
+| Strategy | Mechanism | Use when |
+|---|---|---|
+| Atomic SQL | `UPDATE books SET num_awards = num_awards + 1` | You don't need to read the value before writing |
+| Pessimistic lock | `SELECT ... FOR UPDATE` inside a transaction | You need the current value to make a decision before writing |
+| Optimistic lock | `version` column; retry if `WHERE id=? AND version=?` matches 0 rows | Low contention; prefer retry over blocking |
+
+**Correct answer for this problem:** atomic SQL for both rows inside one transaction.
+No application-side read needed — the DB handles the increment atomically, and the
+transaction ensures both updates succeed or both roll back.
+
+**Why this is a common interview weak spot:** ORMs hide this by default. Candidates
+who haven't explicitly thought about it will reach for application-level logic or
+not mention concurrency at all. Interviewers treat this as a significant signal.
+
+**Coaching requirement:** any practice problem derived from this pattern must force the
+candidate to name all three strategies, pick one with justification, and explain
+why the others don't fit. Reciting definitions is not enough — the reasoning is the signal.
