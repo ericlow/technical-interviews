@@ -2,7 +2,7 @@
 name: skill-gap-analysis
 description: >
   Compare existing problem-generation skills in a coaching framework (e.g.
-  SentryEval) against the patterns observed in the historical interview repository.
+  learn-python) against the patterns observed in the historical interview repository.
   Identify mismatches, missing problem types, and calibration errors. Produces
   a gap report with specific recommendations. Use when the user wants to know
   whether their practice system reflects real interview patterns, or before
@@ -35,12 +35,12 @@ Two practice repos. Ask if not specified:
 
 | Repo | Path | Use for |
 |---|---|---|
-| SentryEval | `/Users/eric/projects/SentryEval` | Python, algorithmic, OOP |
+| learn-python | `/Users/eric/projects/learn-python` | Python, algorithmic, OOP, DB |
 | learn-react | `/Users/eric/projects/learn-react` | Node, TypeScript, React, SQL |
 | System design | — | Disconnected — do not evaluate |
 
 Read the target repo's `CLAUDE.md`, then the relevant SKILL.md files:
-- SentryEval: `oop-problem-gen`, `applied-oop-problem-gen`, `algo-problem-gen`
+- learn-python: `oop-problem-gen`, `applied-oop-problem-gen`, `algo-problem-gen`, `db-problem-gen`, `mechanical-drills`
 - learn-react: `start-session`, `end-session`, `scenario-practice`
 
 ## Step 3: Evaluate on Five Dimensions

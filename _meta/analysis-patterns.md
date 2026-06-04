@@ -4,6 +4,7 @@
 Derived from analysis of all interview sessions in this repository (March 2026).
 Updated 2026-03-26: added TabaPay HackerRank session.
 Updated 2026-05-11: added Mosaic take-home backend API session.
+Updated 2026-05-20: added Axle fundamentals screen.
 
 ## Problems classified as algorithmic (live or automated screen)
 
@@ -21,6 +22,16 @@ Updated 2026-05-11: added Mosaic take-home backend API session.
 | `260320-Typescript-Node-React-Database` (02) | SQL INSERT with JOIN | SQL |
 | `260326-Python-HackerRank-TabaPay` (01) | Transaction Ledger — stdin aggregation | Python |
 | `260326-Python-HackerRank-TabaPay` (02) | Spell Check — multiset frequency check | Python |
+
+---
+
+## Fundamentals / fluency screens
+
+> Distinct format: multiple small, self-contained exercises at Phase 1 complexity. No progressive requirements. Tests language fluency, not algorithm design.
+
+| Session | Exercises | Language |
+|---|---|---|
+| `260520-Axle` | Divisible filter, dict merge with collision sum, dedup keep-first, dedup keep-last | Python |
 
 ---
 
@@ -50,6 +61,8 @@ A dict is the right first structure when the problem contains a **lookup**: "giv
 | Word counter | Given word, find count | `word → count` |
 | Stack profiler | Given function name at this level, find node | `name → Node` (within tree) |
 | Transaction Ledger | Given date or month, find totals | `(month, day) → [G_total, P_total]` |
+
+**Dict merge with collision handling:** When two dicts share a key, the operation on collision must be explicit — sum (Axle), keep one, or raise an error. The cleanest implementation builds a fresh result dict and uses `.get(key, 0)` rather than branching on key existence. The Axle interview solution mutated one of the input dicts as a side effect — a common mistake noted explicitly in the interview code's docstring.
 
 **When NOT to reach for dict first:**
 - Stack profiler: primary structure is a **tree** (dict is secondary, inside nodes)
@@ -206,3 +219,26 @@ not mention concurrency at all. Interviewers treat this as a significant signal.
 **Coaching requirement:** any practice problem derived from this pattern must force the
 candidate to name all three strategies, pick one with justification, and explain
 why the others don't fit. Reciting definitions is not enough — the reasoning is the signal.
+
+---
+
+## Pattern 10: List deduplication with order preservation
+
+Appears when a list may contain duplicate values and the output must preserve relative order.
+The challenge is not detecting duplicates (trivial with a set) but deciding **which occurrence to keep**.
+
+- Keep first: forward pass, `seen` set, append on first encounter only.
+- Keep last: equivalent to reversing the list, applying keep-first, reversing the result.
+  Alternatively: iterate backward, accumulate into a list, then `reversed()` it.
+
+**Natural tool:** a `seen = set()` tracks which values have been encountered. O(n) time, O(n) space.
+
+**Key subtlety (keep last):** a candidate who only knows the forward-pass pattern must reason about
+traversal direction when the problem asks for last occurrence. The reversal trick is the cleanest path.
+
+**Example:** `[0, 1, 2, 0, 3, 0]`  
+- Keep first → `[0, 1, 2, 3]`  
+- Keep last → `[1, 2, 3, 0]`
+
+**Generalizes to:** deduplication in any ordered collection where recency vs. first-occurrence
+semantics must be specified (event logs, user activity streams, ordered records).

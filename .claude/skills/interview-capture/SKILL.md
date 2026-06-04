@@ -64,17 +64,17 @@ Based on the Type field:
 
 | Type | Practice repo | Action |
 |---|---|---|
-| Algorithmic, OOP, Python | `/Users/eric/projects/SentryEval` | Check skill coverage |
+| Algorithmic, OOP, Python, DB | `/Users/eric/projects/learn-python` | Check skill coverage |
 | Full-stack, React, Node, TypeScript, SQL | `/Users/eric/projects/learn-react` | Check scenario/session coverage |
 | System Design | No action — disconnected system | |
 
-For SentryEval: read its `CLAUDE.md` and relevant skill files. Flag if the problem
+For learn-python: read its `CLAUDE.md` and relevant skill files. Flag if the problem
 type is not covered by an existing skill.
 
 For learn-react: read its `CLAUDE.md`. Flag if the problem introduces a pattern not
 covered by existing scenarios or the session generator.
 
-If the stack is ambiguous, ask: "Should this map to SentryEval (Python/algorithmic)
+If the stack is ambiguous, ask: "Should this map to learn-python (Python/algorithmic)
 or learn-react (Node/React/SQL)?"
 
 ## Step 8: Update `CLAUDE.md`

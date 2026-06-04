@@ -4,6 +4,7 @@
 Derived from analysis of all interview sessions in this repository (March 2026).
 Updated 2026-03-26: added TabaPay HackerRank session observations.
 Updated 2026-05-11: added Mosaic take-home backend API session.
+Updated 2026-05-20: added Axle fundamentals screen observations.
 
 ## The core observation
 
@@ -12,6 +13,11 @@ Every human-interviewer algorithmic problem in this repo has multiple phases. Th
 **Automated screens (HackerRank):** do not follow the phase progression. Each problem
 is self-contained, single-phase, and graded pass/fail. The phase framework applies to
 live interview sessions only.
+
+**Fundamentals/fluency screens:** a third format, observed at Axle — multiple small
+Phase-1-only exercises in a single session. No progression, no search or optimization
+phases. Tests whether a candidate can write basic Python correctly and quickly. These
+sessions never reach Phase 2; the evaluation is speed and correctness of fundamentals.
 
 ---
 
@@ -35,6 +41,7 @@ live interview sessions only.
 | Transaction Ledger | Parse stdin lines, accumulate totals into two dicts |
 | Spell Check | For each word, check letter frequency against available pool |
 | Mosaic bookstore | 5 CRUD endpoints — schema given, implement standard REST operations |
+| Axle (4 exercises) | Divisible filter, dict merge with collision sum, dedup keep-first, dedup keep-last |
 
 **Common mistake:** Jumping to Phase 2 logic before Phase 1 is clean. Interviewers notice.
 

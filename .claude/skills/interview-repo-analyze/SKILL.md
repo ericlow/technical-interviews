@@ -65,7 +65,7 @@ Create the file with a header if it does not exist.
 ## Step 8: Flag Practice Repo Impact
 
 - **New Python/algorithmic/OOP patterns found** → flag: consider running `/skill-gap-analysis`
-  against SentryEval (`/Users/eric/projects/SentryEval`)
+  against learn-python (`/Users/eric/projects/learn-python`)
 - **New Node/TypeScript/React/SQL patterns found** → flag: consider extending learn-react
   scenarios or session generator (`/Users/eric/projects/learn-react`)
 - **System design patterns** → note in analysis; no practice repo action needed

@@ -25,6 +25,7 @@ Each directory is one interview session, named `YYMMDD-Company-Stack`.
 | `260322-Verkada` | Prep materials only — no prompt files yet | — |
 | `260326-Python-HackerRank-TabaPay` | Algorithmic — HackerRank screen (2 problems) | Python |
 | `260511-Mosaic-Python` | Backend API take-home — REST CRUD, concurrent writes | Python, PostgreSQL |
+| `260520-Axle` | Algorithmic — fundamentals screen (filter, dict merge, deduplication) | Python |
 
 ## Naming convention
 
@@ -59,7 +60,7 @@ Slash commands available in this repo for common tasks:
 |---|---|
 | `/interview-capture` | Raw materials (photos, PDFs, code) exist but no prompt/solution files — generates `{NN}-prompt.md`, `{NN}-solution.md` |
 | `/interview-repo-analyze` | New sessions have been added and `_meta/` files are stale — refreshes all three analysis files |
-| `/skill-gap-analysis` | Evaluate whether a problem-generation skill (e.g. in SentryEval) matches the patterns observed in this repo |
+| `/skill-gap-analysis` | Evaluate whether a problem-generation skill (e.g. in learn-python) matches the patterns observed in this repo |
 
 ## Instructions for future sessions
 

@@ -208,3 +208,55 @@ This session introduced two things the repository had not seen before. First, a 
 Second, and more significantly, it introduced the **lost update / concurrent write pattern** as a distinct interview topic. This is qualitatively different from prior concurrency content in the repository (which appeared only in Phase 4 discussions about scale). Here, concurrency is a first-class engineering question: the candidate must know why naive read-modify-write fails, and must be able to articulate when to use atomic SQL vs. `SELECT FOR UPDATE` vs. optimistic locking with a version column. The distinction is not trivia — it reflects whether the candidate has actually reasoned about database behavior under load, or is just hoping the ORM handles it.
 
 This is flagged as a **known weak spot** in the coaching notes because ORMs abstract it away in day-to-day work. Candidates who haven't explicitly studied it will either say nothing or propose application-level solutions (mutexes, locks in code) that don't work across multiple web server processes. Any practice problem generated from this pattern must require the candidate to name all three strategies and defend their choice.
+
+---
+
+## 2026-05-20
+
+**Sessions analyzed:** 16 (16 directories total; 1 skipped)
+**Sessions added since last run:** 1 — `260520-Axle`
+**Skipped (no prompt files):** `260322-Verkada` (prep materials only)
+
+### What changed
+
+**analysis-patterns.md** — Added `260520-Axle` in a new "Fundamentals / fluency screens" table, separate from the algorithmic and take-home tables. Added a note under Pattern 2 about dict merge with collision handling, specifically the anti-pattern of mutating an input dict (observed in the interview solution's own docstring). Added Pattern 10: List deduplication with order preservation — covering keep-first (forward pass with seen-set) vs. keep-last (reverse, apply keep-first, reverse result).
+
+**analysis-phases.md** — Added a note distinguishing the fundamentals/fluency screen format from automated HackerRank screens. Added Axle's four exercises to the Phase 1 examples table. This is the first session in the repository where *all* exercises are Phase 1 only — no escalation occurs.
+
+**what-to-expect-algorithmic-interviews.md** — Added "Fundamentals / fluency screen" as a fourth format type in the Format section. Added "ordered list with duplicates — keep first or last" as a new problem shape. Added "List deduplication with order preservation" as a new pattern in the patterns section.
+
+**analysis-log.md** — This entry.
+
+### What prompted the change
+
+`260520-Axle` was captured from an Axle interview on 2026-05-20. The session consisted of 4 short Python exercises — a divisible filter (with parameterization), dict merge with collision summing, and two deduplication variants (keep-first and keep-last). None of the exercises escalated past Phase 1.
+
+### How our understanding evolved
+
+This session introduced a **fourth interview format**: the fundamentals / fluency screen. It is distinct from the three previously documented formats in a meaningful way. Live algorithmic screens test problem-solving and extensibility over one or two complex problems. Automated HackerRank screens test correctness and edge case coverage over self-contained problems. Take-home backend projects test full-stack reasoning. The Axle format does none of these — it tests whether the candidate can write basic Python correctly and quickly, across several small exercises with no design decisions required.
+
+The practical implication is that this format is **best prepared for with mechanical drills**, not with SentryEval's problem generators. The `mechanical-drills` skill in SentryEval already covers the relevant categories: `list-comp` (divisible filter), `sets` (deduplication with seen-set), and dict operations (merge with collision). The dict-merge exercise maps closest to `defaultdict` accumulation patterns but is not exactly covered — `defaultdict` targets single-dict accumulation, while the Axle exercise tests merging *two* dicts with a specified collision strategy. This is a small gap worth noting.
+
+The deduplication keep-last variant is new to the repository and is notable because it tests **traversal direction reasoning** — a candidate who only knows the forward-pass pattern must think carefully about how to adapt it. This is a good single-mechanic drill: trivial in scope but requires explicit reasoning about iteration order.
+
+---
+
+## 2026-06-03 — Admin: SentryEval deprecated, replaced by learn-python
+
+**Sessions analyzed:** 0 — no new sessions  
+**Sessions added since last run:** None
+
+### What changed
+
+All references to `SentryEval` (`/Users/eric/projects/SentryEval`) across this
+repository have been updated to `learn-python` (`/Users/eric/projects/learn-python`).
+Affected files: `CLAUDE.md`, `_meta/analysis-log.md`, and all three skill files
+(`interview-capture`, `interview-repo-analyze`, `skill-gap-analysis`).
+
+`SentryEval` has been deprecated. Its functionality — `oop-problem-gen`,
+`applied-oop-problem-gen`, `algo-problem-gen`, `interview-coach`, `session-review`,
+`mechanical-drills` — has been relocated to `learn-python`, which also adds
+`db-problem-gen`, `db-interview-coach`, and `db-session-review`.
+
+Historical log entries that mention `SentryEval` by name are intentionally preserved
+as-is — they accurately reflect the state of the system at the time they were written.
