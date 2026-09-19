@@ -26,6 +26,9 @@ Each directory is one interview session, named `YYMMDD-Company-Stack`.
 | `260326-Python-HackerRank-TabaPay` | Algorithmic — HackerRank screen (2 problems) | Python |
 | `260511-Mosaic-Python` | Backend API take-home — REST CRUD, concurrent writes | Python, PostgreSQL |
 | `260520-Axle` | Algorithmic — fundamentals screen (filter, dict merge, deduplication) | Python |
+| `260611 - M.AI-React.AI` | UI take-home — progressive Kanban board (4 levels, CodeSignal) | React, TypeScript |
+| `260729-Blue-Shield` | System design (e-commerce, JWT/RBAC) + backend domain (microservice chatter, resumable upload) | Architecture, AWS, React |
+| `260917-SWE-OpenCall` | Algorithmic/OOP — streaming JSONL parser (newline framing, buffering, validation) | Python |
 
 ## Naming convention
 

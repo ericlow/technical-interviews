@@ -5,6 +5,8 @@ Derived from analysis of all interview sessions in this repository (March 2026).
 Updated 2026-03-26: added TabaPay HackerRank session observations.
 Updated 2026-05-11: added Mosaic take-home backend API session.
 Updated 2026-05-20: added Axle fundamentals screen observations.
+Updated 2026-06-12: added M.AI CodeSignal progressive UI screen.
+Updated 2026-09-18: added Blue Shield system design session and SWE Open Call streaming screen.
 
 ## The core observation
 
@@ -14,10 +16,25 @@ Every human-interviewer algorithmic problem in this repo has multiple phases. Th
 is self-contained, single-phase, and graded pass/fail. The phase framework applies to
 live interview sessions only.
 
+**Automated coding screens with hidden-test escalation (CodeSignal-style):** a variant
+observed at SWE Open Call. A single stateful class (`feed`/`get_records` streaming parser),
+graded on exact output against ~16 hidden test cases. There is no live interviewer, so the
+escalation is *smuggled into the test suite*: the cases walk from the happy path (plain
+objects) through malformed input, scalar values, escaped delimiters inside strings, deep
+nesting, and records split across chunk boundaries. The candidate must enumerate these edge
+classes unprompted — the "phases" exist, but only as hidden cases, not spoken requirements.
+
 **Fundamentals/fluency screens:** a third format, observed at Axle — multiple small
 Phase-1-only exercises in a single session. No progression, no search or optimization
 phases. Tests whether a candidate can write basic Python correctly and quickly. These
 sessions never reach Phase 2; the evaluation is speed and correctness of fundamentals.
+
+**Progressive UI screens (CodeSignal):** a fourth automated format, distinct from
+HackerRank. 4 levels unlock sequentially by passing a DOM-querying test suite. The
+levels themselves escalate in front-end complexity (render → interact → fetch → sync),
+but the phase framework maps differently: L1–2 are Phase 1 (render/mutate given data),
+L3–4 are Phase 2 (find and fetch data yourself). No session in this format has
+reached Phase 3 or 4. The test surface is CSS class names, not logic.
 
 ---
 
@@ -42,6 +59,9 @@ sessions never reach Phase 2; the evaluation is speed and correctness of fundame
 | Spell Check | For each word, check letter frequency against available pool |
 | Mosaic bookstore | 5 CRUD endpoints — schema given, implement standard REST operations |
 | Axle (4 exercises) | Divisible filter, dict merge with collision sum, dedup keep-first, dedup keep-last |
+| M.AI L1 | Render tasks from JSON into 3 Kanban columns — data given, implement the display |
+| M.AI L2 | Controlled form: validate, create task, clear fields — state given, mutate it |
+| SWE Open Call | Streaming JSONL parser — buffer chunks, frame on newline, return completed records |
 
 **Common mistake:** Jumping to Phase 2 logic before Phase 1 is clean. Interviewers notice.
 
@@ -65,6 +85,8 @@ sessions never reach Phase 2; the evaluation is speed and correctness of fundame
 | Bank | `TRANSFER` — validate both accounts, check balance, mutate two records |
 | Trailer Yard | Filter events by facility + date overlap (requires interval logic) |
 | Stack profiler | Build the tree from flat traces (the whole algorithm) |
+| M.AI L3 | Fetch tasks from API, filter by status; fetch user by ID for each task that has `assignedUser` |
+| M.AI L4 | Update task status — find the task, mutate its state, re-render in new column |
 
 ---
 
@@ -94,6 +116,7 @@ sessions never reach Phase 2; the evaluation is speed and correctness of fundame
 | AWS manager | Concurrent multi-region queries with partial failure resilience |
 | Supio | Scale to 1000 docs/day, LLM rate limits, DLQ strategy |
 | Mosaic bookstore | Concurrent award increments — lost update problem, atomic SQL vs. locking strategies |
+| Blue Shield | E-commerce for 100k concurrent users — async order flow, JWT/RBAC, resumable 1 TB upload |
 
 ---
 

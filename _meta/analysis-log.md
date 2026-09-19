@@ -260,3 +260,146 @@ Affected files: `CLAUDE.md`, `_meta/analysis-log.md`, and all three skill files
 
 Historical log entries that mention `SentryEval` by name are intentionally preserved
 as-is — they accurately reflect the state of the system at the time they were written.
+
+---
+
+## 2026-06-12
+
+**Sessions analyzed:** 17 (17 directories total; 1 skipped)
+**Sessions added since last run:** 1 — `260611 - M.AI-React.AI`
+**Skipped (no prompt files):** `260322-Verkada` (prep materials only)
+
+### What changed
+
+**analysis-patterns.md** — Added a new "UI / front-end screens" table alongside the
+existing algorithmic and take-home tables, covering `240903-FrontEnd-React` and
+`260611 - M.AI-React.AI`. Added Pattern 11: Async fan-out with per-item secondary fetch
+(React) — `useEffect` + `Promise.all` + conditional enrichment with 404 tolerance.
+Added Pattern 12: Controlled form + state lifting — form creates items that appear
+immediately in a sibling component via shared parent state. Updated source date.
+
+**analysis-phases.md** — Added a fourth automated format note: Progressive UI screens
+(CodeSignal), distinct from HackerRank — levels unlock sequentially, DOM-queried via
+CSS selectors, phase ceiling is Phase 2. Added M.AI L1 and L2 to Phase 1 examples;
+added M.AI L3 and L4 to Phase 2 examples. Updated source date.
+
+**what-to-expect-algorithmic-interviews.md** — Added "Progressive UI screen (CodeSignal)"
+as a fifth format type in the Format section. Added two new problem shapes to the shapes
+table: (1) list of items with optional FK enrichment from secondary API, and (2) user
+creates items that appear immediately in a sibling component. Added two new patterns
+at the end of the patterns section: Async fan-out with per-item secondary fetch, and
+Controlled form + state lifting. Updated source date.
+
+**analysis-log.md** — This entry.
+
+### What prompted the change
+
+`260611 - M.AI-React.AI` was captured from an M.AI CodeSignal assessment on 2026-06-11.
+The problem was a 4-level progressive Kanban board (task management system) in React and
+TypeScript. Levels unlocked sequentially by passing an automated test suite that queried
+the DOM via CSS selectors. Levels 1–3 were completed within 90 minutes; Level 4 was not
+reached.
+
+### How our understanding evolved
+
+This session introduced the **fifth distinct interview format** in the repository: the
+progressive UI screen. It is categorically different from all four previously documented
+formats. Unlike HackerRank (algorithmic, pass/fail), it tests front-end architecture and
+async fluency. Unlike a live interview (progressive requirements via human escalation),
+the progression is automated and locked — you cannot skip or negotiate. Unlike a take-home
+(open stack, full ownership), the scaffold and class names are given. Unlike a fluency
+screen (Phase 1 only), it escalates to Phase 2 at L3 via async data fetching.
+
+The most analytically interesting aspect is the **test surface**: tests do not inspect
+React state, hooks, or component internals — they query the rendered DOM using BEM class
+names. This means spec fidelity (using `card__title`, `column__cards`, `card__owner`
+exactly as specified) is not a style preference; it is the mechanism by which passing
+or failing is determined. A candidate who doesn't notice the class names are fixed will
+fail tests that their logic would otherwise satisfy.
+
+The L3 pattern — fetch a flat list, then fan out per-item to a secondary API, merge
+optional enrichment, render with conditional display — is the most transferable new
+pattern from this session. It is a front-end analog to the backend "concurrent fan-out
+with partial failure tolerance" pattern first observed in the AWS manager session. Both
+use `Promise.all` with per-item error suppression; the difference is that the React
+version's failure condition is a 404 on a secondary call rather than a regional AWS API
+timeout. The right response in both cases is to return the un-enriched result rather than
+failing the whole request.
+
+This session also reinforces that the Phase 1–4 framework applies across domains — not
+only to algorithmic backend problems. L1–2 are unambiguously Phase 1 (data given, render
+it; user action given, handle it). L3 is Phase 2 (go find the data yourself). The
+framework holds even when the "algorithm" is a React render cycle.
+
+---
+
+## 2026-09-18
+
+**Sessions analyzed:** 19 (19 directories total; 1 skipped)
+**Sessions added since last run:** 2 — `260729-Blue-Shield`, `260917-SWE-OpenCall`
+**Skipped (no prompt files):** `260322-Verkada` (prep materials only)
+
+### What changed
+
+**analysis-patterns.md** — Added `260917-SWE-OpenCall` to the automated-screen problems
+table. Added a new "System design sessions" table (GrowTherapy, DoorDash, Supio, and both
+Blue Shield problems) for completeness — these had never been tracked in the patterns file.
+Added Pattern 13: Streaming ingestion — framing arbitrary chunks into records. Updated source
+date.
+
+**analysis-phases.md** — Added a note distinguishing CodeSignal-style automated *coding*
+screens (single stateful class, hidden-test escalation) from HackerRank and the CodeSignal
+*UI* screen. Added the streaming parser to Phase 1 examples and Blue Shield to Phase 4
+examples. Updated source date.
+
+**what-to-expect-algorithmic-interviews.md** — Added "Automated coding screen with
+hidden-test escalation" as a format. Added "stream of arbitrary chunks framed into records"
+to the shapes table. Added a "Streaming ingestion / protocol framing" pattern, placed next to
+stream aggregation to make the contrast explicit. Updated source date.
+
+**analysis-log.md** — This entry.
+
+### What prompted the change
+
+Two untracked sessions were captured. `260729-Blue-Shield` is a verbal system-design
+interview (e-commerce for 100k users: JWT/RBAC internals, async order flow, plus backend
+domain probes on microservice chatter and resumable 1 TB upload). `260917-SWE-OpenCall` is a
+CodeSignal-style Python coding screen: a single `StreamingJsonlParser` class graded on 16
+hidden test cases with exact output.
+
+### How our understanding evolved
+
+The SWE Open Call session introduced the repository's first **streaming / protocol-framing**
+problem, and it is genuinely new. Prior "stream" content (the Everlaw word counter, the
+TabaPay transaction ledger) assumed whole events arrive intact — you aggregate discrete items.
+Here the defining difficulty is the opposite: **record boundaries do not align with arrival
+boundaries.** A single JSON value may be split across many `feed()` calls, and one call may
+carry several values. The correct move is to buffer partial input and frame on the protocol's
+guaranteed delimiter (the newline in JSONL), validating each framed segment with `json.loads`.
+The seductive wrong move — matching the first `{` to the first `}` — fails on every non-trivial
+case (scalars have no braces, strings can contain `}`, objects nest). The lesson worth drilling
+is "frame the transport, don't parse the structure," plus "reach for the stdlib parser instead
+of hand-rolling a brace/escape state machine."
+
+This session also sharpened the taxonomy of automated screens. The repo already had HackerRank
+(multiple self-contained problems) and the CodeSignal *UI* screen (DOM-queried, progressive
+levels). SWE Open Call is a third automated variant: a CodeSignal-style *coding* screen built
+around one stateful class, where the requirement escalation that a live interviewer would speak
+aloud is instead hidden inside the test suite. The practical implication is that edge-case
+enumeration must be proactive — the happy path passes nothing on its own, and "All test cases
+failed" gives no diagnostic signal about which class of input broke.
+
+Blue Shield contributed the repository's first explicitly-tracked system-design entries in the
+patterns file. No practice-repo action follows from it (system design is a disconnected track),
+but it reinforced that the Phase 4 lens — scale, concurrency, failure modes — describes verbal
+architecture interviews as well as it describes the scale phase of a live coding problem.
+
+### Practice repo impact
+
+- **learn-python:** the streaming / protocol-framing pattern is new and likely uncovered by the
+  existing algorithmic and `coderbyte-drill` generators (those parse a complete input in one
+  shot; none maintain buffer state across incremental calls). Recommend running
+  `/skill-gap-analysis` against learn-python to decide whether to add a streaming/stateful-parse
+  drill.
+- **learn-react:** no impact this run.
+- **System design (Blue Shield):** noted in analysis only; no practice-repo action.

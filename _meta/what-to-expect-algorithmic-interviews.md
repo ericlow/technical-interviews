@@ -5,6 +5,8 @@ Derived from analysis of all interview sessions in this repository (March 2026).
 Updated 2026-03-26: added TabaPay HackerRank session.
 Updated 2026-05-11: added Mosaic take-home backend API session.
 Updated 2026-05-20: added Axle fundamentals screen.
+Updated 2026-06-12: added M.AI CodeSignal progressive UI screen.
+Updated 2026-09-18: added Blue Shield system design session and SWE Open Call streaming screen.
 Refresh by re-reading the `_meta/` files and all `{NN}-prompt.md` files, then regenerate.
 
 ---
@@ -23,6 +25,14 @@ Refresh by re-reading the `_meta/` files and all `{NN}-prompt.md` files, then re
 - Graded on correctness and edge case coverage, not design decisions
 - Focus: clean Phase 1 implementation, stdin/stdout parsing, output formatting
 
+**Automated coding screen with hidden-test escalation (CodeSignal-style):**
+- A single stateful class (methods called in sequence by a stdin driver)
+- Graded on exact output against ~16 hidden test cases; "All test cases failed" is binary and blunt
+- No interviewer, so requirement escalation is *hidden in the test cases* — happy path first,
+  then malformed input, edge types, and adversarial inputs
+- Focus: enumerate edge classes yourself before submitting; frame the problem correctly first
+- Example: SWE Open Call — `StreamingJsonlParser` (`feed`/`get_records`), newline-framed JSONL
+
 **Take-home backend API project:**
 - 60–90 minutes; full REST API with a relational database
 - You own the stack choice; schema design and API design both evaluated
@@ -36,6 +46,13 @@ Refresh by re-reading the `_meta/` files and all `{NN}-prompt.md` files, then re
 - Tests basic Python syntax, built-in usage, and traversal direction reasoning
 - Speed and correctness both matter; design decisions are minimal
 - Example: Axle — divisible filter, dict merge, dedup keep-first, dedup keep-last
+
+**Progressive UI screen (CodeSignal):**
+- 4 locked levels; each unlocks by passing the current level's automated test suite
+- Test suite queries the DOM via CSS selectors — exact class names are the contract
+- 90 minutes; escalates render → interact → async fetch → state mutation
+- Phase ceiling: Phase 2 (no optimization, no distribution)
+- Example: M.AI — Kanban board, 4 levels, React/TypeScript
 
 ---
 
@@ -80,6 +97,9 @@ Phase 1 is rarely where candidates fail. They fail when Phase 2 arrives and thei
 | "Can this request be satisfied by the pool?" | Counter / frequency dict | spell check |
 | Two tables in sync, one denormalized from the other | relational DB + atomic SQL | Mosaic bookstore (`num_total_awards`) |
 | Ordered list with duplicate values — keep first or last occurrence | set (seen) + traversal direction | Axle dedup exercises |
+| List of items with optional foreign-key enrichment from a secondary API | useEffect + Promise.all + conditional render | M.AI L3 (tasks + user names) |
+| User creates items that must appear immediately in a sibling component | controlled form + state lifted to common ancestor | M.AI L2 (create task form) |
+| Stream of arbitrary chunks that must be framed into records | buffer + protocol delimiter + completeness validation | SWE Open Call (streaming JSONL parser) |
 
 **The real skill:** ask "what is the shape of this data?" before writing any code.
 
@@ -124,6 +144,19 @@ Events arrive one at a time. Maintain a running aggregate. Query efficiently.
 - Example: Word counter (`onTweet` → `getWordCount`) — natural structure: dict
 - Example: Transaction Ledger (stdin lines → two dicts, then sort-and-print)
 
+### Streaming ingestion / protocol framing
+Data arrives as arbitrary chunks whose boundaries don't align with record boundaries. Buffer
+partial input across calls, frame on the protocol's guaranteed delimiter, validate completeness.
+- Example: SWE Open Call — `StreamingJsonlParser`; frame on `\n`, validate each line with
+  `json.loads`, skip malformed lines, return raw record strings
+- **The trap:** matching structure (first `{` … first `}`) instead of the frame. Fails on
+  scalars (`true`, `42`), braces inside strings, and nested objects.
+- **The fix:** buffer + delimiter + `json.loads` completeness check. Don't hand-roll a
+  brace/string/escape state machine when framing + a stdlib parser does it.
+- Contrast with stream aggregation: there whole events arrive intact; here a record can be
+  split across chunks, so buffering partial input is the whole challenge.
+- Generalizes to: length-prefixed / delimited protocols, log parsers, SSE/websocket consumers.
+
 ### Multiset / frequency-map
 Check if a request can be satisfied by a pool of resources with per-item quantities.
 - Example: Spell Check — letter availability per word, checked with Counter subtraction
@@ -154,6 +187,21 @@ A list contains duplicate values; the output must retain unique values in origin
 - Example: Axle — keep-first (`[0,1,2,0,3,0]` → `[0,1,2,3]`) and keep-last (`[0,1,2,0,3,0]` → `[1,2,3,0]`)
 - Natural tool: `seen = set()` for O(1) membership; iterate forward (keep first) or backward then reverse (keep last)
 - Key question: "which occurrence do you keep?" Interviewers may flip this after the first implementation.
+
+### Async fan-out with per-item secondary fetch (React)
+A primary API returns a list; some items have a foreign key ID that resolves via a second API.
+Enrichment is optional — the item renders without it; include it only when the lookup succeeds.
+- Example: M.AI L3 — fetch task list, then `Promise.all` over tasks with `assignedUser` to fetch user names; omit `card__owner` span on 404
+- Pattern: `useEffect` → fetch primary → `Promise.all(items.map(async item => { ... }))` → `setState`
+- 404 handling: check `res.ok`, return the un-enriched item rather than throwing
+- Test surface: CSS class name presence/absence (`card__owner` span), not React state
+
+### Controlled form + state lifting (React)
+A form creates items that must immediately appear in a sibling list component. Both share
+the same underlying collection — state must live in the common ancestor.
+- Example: M.AI L2 — `CreateTaskForm` pushes to `todoItems`; `TaskColumn` renders it; both are children of `App`
+- Validation: check required fields on submit, `return` early if invalid; do not clear fields on failed submit
+- ID: generate with `uuidv4()` at submission time
 
 ---
 

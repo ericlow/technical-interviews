@@ -5,6 +5,19 @@ Derived from analysis of all interview sessions in this repository (March 2026).
 Updated 2026-03-26: added TabaPay HackerRank session.
 Updated 2026-05-11: added Mosaic take-home backend API session.
 Updated 2026-05-20: added Axle fundamentals screen.
+Updated 2026-06-12: added M.AI CodeSignal progressive UI screen.
+Updated 2026-09-18: added Blue Shield system design session and SWE Open Call streaming screen.
+
+## UI / front-end screens
+
+> Distinct format: test suite queries the DOM via CSS selectors; tests pass/fail against rendered output, not logic. Levels unlock sequentially. No algorithmic reasoning required.
+
+| Session | Problem | Stack |
+|---|---|---|
+| `240903-FrontEnd-React` | Payment progress bar — single component, derived state | React, TypeScript |
+| `260611 - M.AI-React.AI` | Kanban board — 4 progressive levels (render → form → async fetch → status update) | React, TypeScript |
+
+---
 
 ## Problems classified as algorithmic (live or automated screen)
 
@@ -22,6 +35,23 @@ Updated 2026-05-20: added Axle fundamentals screen.
 | `260320-Typescript-Node-React-Database` (02) | SQL INSERT with JOIN | SQL |
 | `260326-Python-HackerRank-TabaPay` (01) | Transaction Ledger — stdin aggregation | Python |
 | `260326-Python-HackerRank-TabaPay` (02) | Spell Check — multiset frequency check | Python |
+| `260917-SWE-OpenCall` (01) | Streaming JSONL parser — chunk buffering + newline framing | Python |
+
+---
+
+## System design sessions
+
+> Distinct format: verbal or written architecture discussion. The evaluator drills into
+> specific mechanics (auth internals, data flow, scale) rather than grading code. Noted here
+> for completeness; no algorithmic practice-repo action. See individual session solutions.
+
+| Session | Problem | Focus |
+|---|---|---|
+| `250903-GrowTherapy-SystemDesign` | System design | Architecture |
+| `251010-DoorDash-SystemDesign` | System design | Architecture |
+| `251120-Supio-SystemDesign` | Take-home doc | LLM pipeline |
+| `260729-Blue-Shield` (01) | E-commerce platform — JWT/RBAC, async order flow, 100k users | Architecture |
+| `260729-Blue-Shield` (02) | Backend domain — microservice chatter, resumable 1 TB upload | Architecture |
 
 ---
 
@@ -222,6 +252,67 @@ why the others don't fit. Reciting definitions is not enough — the reasoning i
 
 ---
 
+## Pattern 11: Async fan-out with per-item secondary fetch (React)
+
+Appears when a primary API returns a list of items, some of which reference IDs that
+must be resolved via a second API. The resolution is optional — the item renders fine
+without it, but is enriched if the lookup succeeds.
+
+- M.AI L3: fetch tasks list → for each task with `assignedUser` ID, fetch user name from
+  Users API → merge name into task → render. If Users API returns 404, omit the owner field.
+
+**React pattern:**
+```tsx
+useEffect(() => {
+  fetch(TASKS_API)
+    .then(r => r.json())
+    .then(async tasks => {
+      const enriched = await Promise.all(
+        tasks.map(async t => {
+          if (!t.assignedUser) return t;
+          const res = await fetch(`${USERS_API}/${t.assignedUser}`);
+          if (!res.ok) return t;           // 404 → omit enrichment
+          const user = await res.json();
+          return { ...t, ownerName: user.name };
+        })
+      );
+      setTasks(enriched);
+    });
+}, []);
+```
+
+**Key decisions:**
+- `Promise.all` parallelizes secondary fetches without violating "fetch one at a time" — the
+  instructions said not to batch, not to serialize.
+- `res.ok` check on the secondary call covers 404 gracefully; no error thrown to the user.
+- The primary item is always rendered; the secondary enrichment is additive.
+
+**Test surface:** CSS class name presence/absence. `card__owner` span is expected only
+when a user name was successfully resolved. The test checks the DOM, not React state.
+
+**Generalizes to:** any pattern where a list has optional foreign-key enrichment
+(e.g., resolve avatar URLs, display names, tags).
+
+---
+
+## Pattern 12: Controlled form + state lifting
+
+Appears when a form creates items that must immediately appear in a sibling component.
+The form and the list share the same underlying collection — the collection state must
+live in their common ancestor.
+
+- M.AI L2: `CreateTaskForm` pushes a new task; `TaskColumn` renders the list.
+  State (`todoItems`) lives in `App`, passed down as props.
+
+**Validation:** client-side only. If either required field is empty, `return` before
+calling `onAddTask`. Do not clear fields on failed submission.
+
+**ID generation:** `uuid` library (`uuidv4()`) — generate at submission time, not render time.
+
+**Generalizes to:** any "add to list" UI — comment forms, todo apps, item creators.
+
+---
+
 ## Pattern 10: List deduplication with order preservation
 
 Appears when a list may contain duplicate values and the output must preserve relative order.
@@ -242,3 +333,43 @@ traversal direction when the problem asks for last occurrence. The reversal tric
 
 **Generalizes to:** deduplication in any ordered collection where recency vs. first-occurrence
 semantics must be specified (event logs, user activity streams, ordered records).
+
+---
+
+## Pattern 13: Streaming ingestion — frame arbitrary chunks into records
+
+Appears when data arrives as a stream of **arbitrary text chunks whose boundaries have no
+relationship to the record boundaries**. A single record may be split across many `feed()`
+calls, and one `feed()` may carry several records. The class must maintain buffer state
+across calls and expose completed records at any time, including mid-stream.
+
+- SWE Open Call: `StreamingJsonlParser` with `feed(chunk)` / `get_records()`. Input is
+  JSONL (JSON values separated by newlines).
+
+**The trap:** the record *looks* structural (`{ ... }`), so the tempting solution matches
+braces. Brace matching fails on bare scalars (`true`, `42`), braces inside strings
+(`"he said }"`), and nested objects (the first `}` is not the record's).
+
+**The right primitive: find the frame, not the structure.** The only reliable delimiter is
+the one the protocol guarantees — here the newline (JSONL forbids literal newlines inside a
+value). The algorithm:
+
+1. Append each chunk to a running buffer.
+2. While a delimiter is present, cut the segment before it.
+3. Validate the segment is a complete record — `json.loads` gives this for free; skip
+   segments that don't parse (a malformed line is dropped, not fatal).
+4. Keep the trailing unterminated remainder buffered for the next `feed`.
+5. Return the accumulated records (as raw strings — not re-serialized objects).
+
+**Distinct from stream aggregation (Pattern under "Stream aggregation"):** there, whole
+events arrive as discrete items and you maintain a running total. Here the hard part is that
+**record boundaries don't align with arrival boundaries**, so you must buffer partial input
+and detect completeness.
+
+**Hidden-test escalation:** this was an automated screen (CodeSignal-style, exact output,
+16 hidden cases). The "phases" were smuggled into the test suite — plain objects, then
+malformed lines, scalars, escaped braces in strings, deep nesting, and values split across
+chunks. Enumerate these classes before submitting; there is no interviewer to reveal them.
+
+**Generalizes to:** any framed transport — length-prefixed messages, newline/`\0`-delimited
+protocols, log-line parsers, SSE/websocket consumers, incremental tokenizers.
